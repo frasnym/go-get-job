@@ -1,0 +1,51 @@
+# linkedin-jobs-daily — scraper configuration
+# Copy nothing: edit values in place. Run: python3 scrape.py
+#
+# Requires Python 3.11+ (stdlib only, no pip installs).
+
+[scraper]
+# Keywords and locations are crossed: len(keywords) * len(locations) queries per run.
+keywords = [
+  "software engineer",
+  "backend engineer",
+  "golang",
+]
+locations = [
+  "Ireland",
+]
+
+# f_TPR window on LinkedIn's side: 1 = last 24h, 7 = last 7 days, ...
+days_back = 1
+
+# 10 results per page; LinkedIn stops returning results at ~40 per query,
+# so anything above 4 is wasted requests.
+max_pages = 4
+
+# Seconds between requests (pacing). Raise this if you see HTTP 429/999.
+delay_sec = 1.5
+
+# Add jitter of up to this many seconds on top of delay_sec (0 disables).
+jitter_sec = 0.75
+
+# Browser User-Agent sent with every request.
+user_agent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0 Safari/537.36"
+
+# HTTP timeout per request, seconds.
+timeout_sec = 25
+
+[details]
+# Fetch full job description + criteria (seniority / employment type / industry)
+# from each job's detail page. Costs 1 extra request per NEW job, so a run with
+# 30 new jobs does ~30 extra requests on top of the listing pages.
+fetch = true
+# Cap detail fetches per run (0 = no cap). Keeps a first run from doing
+# hundreds of requests when the database is still empty.
+max_per_run = 50
+
+[storage]
+# SQLite database (created on first run).
+database = "jobs.db"
+
+[digest]
+# Directory that digest.py writes its markdown files into.
+output_dir = "digests"

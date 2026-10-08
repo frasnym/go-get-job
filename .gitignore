@@ -1,0 +1,6 @@
+# runtime artifacts — don't commit
+jobs.db
+jobs.db-*
+digests/
+__pycache__/
+*.pyc
